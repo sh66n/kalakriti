@@ -2,7 +2,6 @@ import { getProject } from "@/lib/data";
 import { IProject } from "@/models/project.schema";
 import Link from "next/link";
 import React from "react";
-import { redirect } from "next/navigation";
 import DeleteButton from "@/components/DeleteButton";
 
 const Project = async ({ params }: any) => {

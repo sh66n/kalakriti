@@ -19,7 +19,7 @@ const NewProjectForm = () => {
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
-    zProject.parse(formState);
+    zProject.safeParse(formState);
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects`,
