@@ -3,6 +3,7 @@ import { IProject } from "@/models/project.model";
 import React from "react";
 import axios from "axios";
 import { cookies } from "next/headers";
+import Link from "next/link";
 
 export const getProjects = async (): Promise<IProject[] | null> => {
   try {
@@ -27,7 +28,11 @@ const Projects = async () => {
   return (
     <div>
       {projects &&
-        projects.map((project) => <li key={project._id}>{project.title}</li>)}
+        projects.map((project) => (
+          <li key={project._id}>
+            <Link href={`/projects/${project._id}`}>{project.title}</Link>
+          </li>
+        ))}
     </div>
   );
 };

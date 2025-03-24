@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { connectToDb } from "@/lib/connectToDb";
-import { IProject, Project, zProject } from "@/models/project.model";
+import { Project } from "@/models/project.model";
+import { IProject, zProject } from "@/models/project.schema";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = auth(async (req, { params }: any): Promise<NextResponse> => {
