@@ -15,6 +15,12 @@ const projectSchema = new Schema<IProject>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    images: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

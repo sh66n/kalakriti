@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { uploadImage } from "@/lib/cloudinary";
 import { connectToDb } from "@/lib/connectToDb";
 import { Project } from "@/models/project.model";
 import { zProject, IProject } from "@/models/project.schema";
@@ -24,11 +25,24 @@ export const POST = auth(async (req): Promise<NextResponse> => {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
     await connectToDb();
-    const body: IProject = await req.json();
+    const formData = await req.formData();
+
+    const images = formData.getAll("images") as File[];
+
+    const body: any = Object.fromEntries(formData.entries());
+
+    for (const image of images) {
+      const data: { url: string } = (await uploadImage(image)) as {
+        url: string;
+      };
+      body.images.push(data.url);
+    }
+
     body.author = req.auth.user._id;
+
     zProject.parse(body);
-    const newProject = new Project(body);
-    newProject.save();
+
+    const newProject = await Project.create(body);
     return NextResponse.json(newProject, { status: 200 });
   } catch (error) {
     console.error(error);

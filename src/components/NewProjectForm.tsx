@@ -4,37 +4,85 @@ import { zProject } from "@/models/project.schema";
 import React, { useState } from "react";
 
 const NewProjectForm = () => {
-  const [formState, setFormData] = useState({
-    title: null,
-    description: null,
+  const [images, setImages] = useState<File[]>([]);
+
+  const [formState, setFormState] = useState({
+    title: "",
+    description: "",
+    images: [] as File[],
   });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const fileArray = Array.from(e.target.files);
+      setImages(fileArray);
+      setFormState((prev) => ({
+        ...prev,
+        images: fileArray,
+      }));
+    }
+  };
 
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = evt.target;
-    setFormData((prevState) => ({
+    setFormState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  const handleSubmit = async (evt: React.FormEvent) => {
+  const handleSubmit = async (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    zProject.safeParse(formState);
+
+    const formData = new FormData();
+    formData.append("title", formState.title);
+    formData.append("description", formState.description);
+
+    formState.images.forEach((file, index) => {
+      formData.append(`images`, file);
+    });
+
+    // for (const pair of formData.entries()) {
+    //   console.log(pair[0], pair[1]);
+    // }
     try {
       const { data } = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects`,
-        JSON.stringify(formState)
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log(data);
     } catch (error) {
       console.error(error);
     }
   };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" name="title" onChange={handleChange} />
-      <input type="text" name="description" onChange={handleChange} />
-      <button>Submit</button>
+    <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <input
+        type="text"
+        name="title"
+        value={formState.title}
+        onChange={handleChange}
+      />
+      <input
+        type="text"
+        name="description"
+        value={formState.description}
+        onChange={handleChange}
+      />
+      <input
+        type="file"
+        name="images"
+        accept="image/*"
+        onChange={handleFileChange}
+        multiple
+      />
+      <button type="submit">Submit</button>
     </form>
   );
 };

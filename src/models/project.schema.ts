@@ -6,6 +6,7 @@ export const zProject = z
     title: z.string(),
     description: z.string(),
     author: z.string(),
+    images: z.array(z.string()),
   })
   .strict();
 
@@ -14,4 +15,5 @@ export interface IProject {
   title: string;
   description: string;
   author: Types.ObjectId;
+  images: string[];
 }
