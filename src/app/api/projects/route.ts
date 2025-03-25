@@ -31,6 +31,8 @@ export const POST = auth(async (req): Promise<NextResponse> => {
 
     const body: any = Object.fromEntries(formData.entries());
 
+    body.images = [];
+
     for (const image of images) {
       const data: { url: string } = (await uploadImage(image)) as {
         url: string;
@@ -46,6 +48,9 @@ export const POST = auth(async (req): Promise<NextResponse> => {
     return NextResponse.json(newProject, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(error, { status: 400 });
+    return NextResponse.json(
+      { message: "Error creating project", error: error },
+      { status: 400 }
+    );
   }
 });

@@ -1,9 +1,9 @@
 "use client";
 import { getProject } from "@/lib/data";
 import { zProject } from "@/models/project.schema";
-import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const Edit = ({ params }: any) => {
   const { id } = useParams();
@@ -14,6 +14,7 @@ const Edit = ({ params }: any) => {
     description: "Loading...",
   });
 
+  console.log(formState);
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
@@ -21,6 +22,9 @@ const Edit = ({ params }: any) => {
         if (data) {
           delete data._id;
           delete data.__v;
+          const authorId = data.author._id;
+          delete data.author;
+          data.author = authorId;
           setFormState(data);
         }
       }
@@ -48,7 +52,13 @@ const Edit = ({ params }: any) => {
         }
       );
       const data = await res.json();
-      if (res.ok) router.push("/projects");
+      if (res.ok) {
+        router.push("/projects");
+        toast.success("Edited successfully", {
+          position: "top-left",
+          theme: "light",
+        });
+      }
     } catch (error) {
       console.log(error);
     }

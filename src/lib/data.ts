@@ -19,7 +19,7 @@ export const getProjects = async (user_id): Promise<IProject[] | null> => {
 export const getProject = async (id: string): Promise<IProject | null> => {
   try {
     await connectToDb();
-    const mongooseProject = await Project.findById(id);
+    const mongooseProject = await Project.findById(id).populate("author");
     const plainProject = JSON.parse(JSON.stringify(mongooseProject));
     return plainProject;
   } catch (error) {

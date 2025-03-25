@@ -2,8 +2,11 @@
 import axios from "axios";
 import { zProject } from "@/models/project.schema";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const NewProjectForm = () => {
+  const router = useRouter();
   const [images, setImages] = useState<File[]>([]);
 
   const [formState, setFormState] = useState({
@@ -55,7 +58,11 @@ const NewProjectForm = () => {
           },
         }
       );
-      console.log(data);
+      toast.success("Your project has been listed successfully!", {
+        position: "top-left",
+        theme: "light",
+      });
+      router.push("/projects");
     } catch (error) {
       console.error(error);
     }

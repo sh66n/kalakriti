@@ -4,6 +4,7 @@ import React from "react";
 import axios from "axios";
 import { cookies } from "next/headers";
 import Link from "next/link";
+import ProjectCard from "@/components/ProjectCard";
 
 export const getProjects = async (): Promise<IProject[] | null> => {
   try {
@@ -27,12 +28,21 @@ const Projects = async () => {
   const projects: IProject[] | null = await getProjects();
   return (
     <div>
-      {projects &&
-        projects.map((project) => (
-          <li key={project._id}>
-            <Link href={`/projects/${project._id}`}>{project.title}</Link>
-          </li>
-        ))}
+      <div className="relative min-h-screen">
+        <div className="grid grid-cols-4 gap-2 mx-24">
+          {projects &&
+            projects.map((project) => (
+              <ProjectCard key={project._id} id={project._id} />
+            ))}
+        </div>
+
+        <Link href={"/projects/new"}>
+          <div className="fixed bottom-5 right-5 h-[5rem] w-[5rem] bg-blue-500 flex items-center justify-center rounded-lg text-5xl">
+            +
+          </div>
+        </Link>
+      </div>
+      <div className="min-h-screen"></div>
     </div>
   );
 };
