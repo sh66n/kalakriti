@@ -4,64 +4,52 @@ import { Project } from "@/models/project.model";
 import { IProject, zProject } from "@/models/project.schema";
 import { NextRequest, NextResponse } from "next/server";
 
-// Next.js 15 expects this specific function signature for route handlers
-export async function GET(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
+export const GET = auth(async (req, { params }: any): Promise<NextResponse> => {
   try {
-    const session = await auth();
-    if (!session) {
+    if (!req.auth) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-
     await connectToDb();
-    const { id } = context.params;
+    const { id } = await params;
     const project = await Project.findById(id);
     return NextResponse.json(project, { status: 200 });
   } catch (error) {
     return NextResponse.json(error, { status: 500 });
   }
-}
+});
 
-export async function PATCH(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-  try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+export const PATCH = auth(
+  async (req, { params }: any): Promise<NextResponse> => {
+    try {
+      if (!req.auth) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      }
+      await connectToDb();
+      const { id } = await params;
+      const body: IProject = await req.json();
+      zProject.parse(body);
+      const updatedProject = await Project.findByIdAndUpdate(id, body, {
+        new: true,
+      });
+      return NextResponse.json(updatedProject, { status: 201 });
+    } catch (error) {
+      return NextResponse.json(error, { status: 500 });
     }
-
-    await connectToDb();
-    const { id } = context.params;
-    const body: IProject = await request.json();
-    zProject.parse(body);
-    const updatedProject = await Project.findByIdAndUpdate(id, body, {
-      new: true,
-    });
-    return NextResponse.json(updatedProject, { status: 201 });
-  } catch (error) {
-    return NextResponse.json(error, { status: 500 });
   }
-}
+);
 
-export async function DELETE(
-  request: NextRequest,
-  context: { params: { id: string } }
-) {
-  try {
-    const session = await auth();
-    if (!session) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+export const DELETE = auth(
+  async (req, { params }: any): Promise<NextResponse> => {
+    try {
+      if (!req.auth) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      }
+      await connectToDb();
+      const { id } = await params;
+      const deletedProject = await Project.findByIdAndDelete(id, { new: true });
+      return NextResponse.json(deletedProject, { status: 200 });
+    } catch (error) {
+      return NextResponse.json(error, { status: 500 });
     }
-
-    await connectToDb();
-    const { id } = context.params;
-    const deletedProject = await Project.findByIdAndDelete(id, { new: true });
-    return NextResponse.json(deletedProject, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(error, { status: 500 });
   }
-}
+);
