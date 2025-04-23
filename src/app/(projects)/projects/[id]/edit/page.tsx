@@ -21,7 +21,7 @@ const Edit = () => {
         // Convert id to string if it's an array
         const projectId = Array.isArray(id) ? id[0] : id;
         const data = await getProject(projectId);
-        if (data) {
+        if (data && data.author) {
           delete data._id;
           const authorId = data.author._id;
           delete data.author;
