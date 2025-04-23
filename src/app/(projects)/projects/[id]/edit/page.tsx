@@ -23,7 +23,6 @@ const Edit = () => {
         const data = await getProject(projectId);
         if (data) {
           delete data._id;
-          delete data.__v;
           const authorId = data.author._id;
           delete data.author;
           data.author = authorId;
