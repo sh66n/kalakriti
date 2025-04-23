@@ -1,4 +1,21 @@
-import mongoose, { Schema, model } from "mongoose";
+// Check if we're in a browser/edge environment
+const mongoose = (() => {
+  let m;
+  try {
+    // Only import mongoose in server environments
+    m = require("mongoose");
+  } catch (e) {
+    // In edge runtime, return a minimal API that won't crash
+    return {
+      models: {},
+      model: () => {},
+      Schema: function () {
+        return {};
+      },
+    };
+  }
+  return m;
+})();
 
 export interface IUser {
   _id: string;
@@ -9,7 +26,7 @@ export interface IUser {
   password?: string;
 }
 
-const userSchema = new Schema<IUser>(
+const userSchema = new mongoose.Schema(
   {
     email: {
       type: String,
@@ -34,4 +51,6 @@ const userSchema = new Schema<IUser>(
   { timestamps: true }
 );
 
-export const User = mongoose.models?.User || model<IUser>("User", userSchema);
+// Only create the model in server environments
+export const User =
+  mongoose.models?.User || mongoose.model<IUser>("User", userSchema);
