@@ -4,9 +4,9 @@ import { Project } from "@/models/project.model";
 import { IProject, zProject } from "@/models/project.schema";
 import { NextRequest, NextResponse } from "next/server";
 
-// Create the handler functions separately first
-async function getHandler(
-  req: NextRequest,
+// Next.js 15 expects this specific function signature for route handlers
+export async function GET(
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
@@ -24,8 +24,8 @@ async function getHandler(
   }
 }
 
-async function patchHandler(
-  req: NextRequest,
+export async function PATCH(
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
@@ -36,7 +36,7 @@ async function patchHandler(
 
     await connectToDb();
     const { id } = context.params;
-    const body: IProject = await req.json();
+    const body: IProject = await request.json();
     zProject.parse(body);
     const updatedProject = await Project.findByIdAndUpdate(id, body, {
       new: true,
@@ -47,8 +47,8 @@ async function patchHandler(
   }
 }
 
-async function deleteHandler(
-  req: NextRequest,
+export async function DELETE(
+  request: NextRequest,
   context: { params: { id: string } }
 ) {
   try {
@@ -65,8 +65,3 @@ async function deleteHandler(
     return NextResponse.json(error, { status: 500 });
   }
 }
-
-// Export the handlers with proper Next.js App Router types
-export const GET = getHandler;
-export const PATCH = patchHandler;
-export const DELETE = deleteHandler;
