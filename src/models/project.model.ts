@@ -9,16 +9,25 @@ const projectSchema = new Schema<IProject>(
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
     author: {
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    link: {
+      type: String,
+    },
     images: [
       {
         type: String,
         required: true,
+      },
+    ],
+    collaborators: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },

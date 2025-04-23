@@ -11,18 +11,19 @@ const UserPage = async ({ params }: any) => {
   const userProjects = await getProjects(user?._id);
   console.log(userProjects);
   return (
-    <div>
-      <div className="flex items-center mb-10">
+    <div className="pt-35 text-white mx-56 mb-10">
+      <div className="flex items-center mb-4">
         <div
-          className="h-24 w-24 bg-red-100 bg-cover rounded-full mr-4"
+          className="h-12 w-12 bg-red-100 bg-cover rounded-full mr-4"
           style={{ backgroundImage: `url(${user?.avatar})` }}
         ></div>
-        <div className="text-3xl">{user.username}</div>
+        <div className="text-2xl">{user.name}</div>
       </div>
-      <div className="text-xl text-center">My Projects</div>
-      <div className="grid grid-cols-3 mx-56 gap-6">
+      <hr className="border-0 h-0.25 bg-[#2e2e2e] mb-4" />
+
+      <div className="grid grid-cols-3 gap-6">
         {userProjects?.map((project) => (
-          <ProjectCard key={project._id} id={project._id} />
+          <ProjectCard key={project._id} project={project} />
         ))}
       </div>
     </div>

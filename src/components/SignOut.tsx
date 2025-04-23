@@ -1,14 +1,16 @@
-import { signOut } from "@/auth";
+"use client";
+
+import { auth, signOut } from "@/auth";
+import { handleSignOut } from "@/lib/signOut";
 
 export function SignOut() {
   return (
-    <form
-      action={async () => {
-        "use server";
-        await signOut();
-      }}
+    <button
+      type="submit"
+      className="hover:cursor-pointer"
+      onClick={handleSignOut}
     >
-      <button type="submit">Sign Out</button>
-    </form>
+      Sign Out
+    </button>
   );
 }

@@ -1,22 +1,29 @@
-import { getProject, getUserByUsername } from "@/lib/data";
+import { getProject } from "@/lib/data";
 import React from "react";
 import UserAvatar from "./UserAvatar";
 import Link from "next/link";
+import Image from "next/image";
+import { formatDistanceToNow } from "date-fns";
 
-const ProjectCard = async ({ id }: any) => {
-  const project = await getProject(id);
+const ProjectCard = async ({ project }: any) => {
   console.log(project);
+  const timeAgo = formatDistanceToNow(project.updatedAt, { addSuffix: true });
+
   return (
     <Link href={`/projects/${project?._id}`}>
-      <div className="bg-pink-100 rounded-sm flex flex-col items-center p-6 ">
-        <div
-          className="bg-cover bg-center h-[14rem] w-[14rem]"
-          style={{ backgroundImage: `url(${project.images[0]})` }}
-        ></div>
-        <div className="text-xl">{project.title}</div>
-        <div className="">{project?.description}</div>
-        <div>
-          <UserAvatar username={project?.author.username} />
+      <div className="text-white">
+        <div className="h-[15rem] w-full bg-white overflow-hidden p-3 rounded-sm">
+          <Image
+            src={project.images[0]}
+            alt="1"
+            width={160 * 3}
+            height={90 * 3}
+            className="object-cover w-full h-full"
+          ></Image>
+        </div>
+        <div className="w-full flex mt-2 gap-2">
+          <div className="truncate w-fit max-w-3/4">{project.title} </div>
+          <div className="w-fit text-[#8a8a8a]">{timeAgo}</div>
         </div>
       </div>
     </Link>

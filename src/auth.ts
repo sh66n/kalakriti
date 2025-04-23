@@ -14,6 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const dbUser = await User.findOne({ username: profile.login });
         if (dbUser) {
           token.id = dbUser._id;
+          token.username = dbUser.username;
         }
       }
       return token;
@@ -21,6 +22,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     session({ session, token, user }) {
       session.user._id = token.id;
+      session.user.username = token.username;
       return session;
     },
 
@@ -57,9 +59,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isOnNewProjectPage = request.url.endsWith("/new");
 
       //action taken depending on where we are
-      if (isOnHomePage && !auth) {
-        return false;
-      }
+      // if (isOnHomePage && !auth) {
+      //   return false;
+      // }
       if (isOnLoginPage && auth) {
         const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
         if (callbackUrl) {
@@ -67,9 +69,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         return Response.redirect(new URL("/", request.nextUrl));
       }
-      if (isOnProjectsPage && !auth) {
-        return false;
-      }
+      // if (isOnProjectsPage && !auth) {
+      //   return false;
+      // }
       if (isOnNewProjectPage && !auth) {
         return false;
       }

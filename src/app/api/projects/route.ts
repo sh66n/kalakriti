@@ -7,9 +7,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = auth(async (req): Promise<NextResponse> => {
   try {
-    if (!req.auth) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-    }
+    // if (!req.auth) {
+    //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    // }
     await connectToDb();
     const allProjects = await Project.find({});
     return NextResponse.json(allProjects, { status: 200 });
