@@ -3,15 +3,15 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 
 const Home = () => {
-  const [position, setPosition] = useState(80);
+  const [position, setPosition] = useState(30);
   const prevButtonRef = useRef(null);
   const nextButtonRef = useRef(null);
 
   const moveCarousel = (buttonRef) => {
     if (buttonRef.current.id == "next") {
-      setPosition((prevPosition) => prevPosition - 30);
+      setPosition((prevPosition) => prevPosition - 50);
     } else {
-      setPosition((prevPosition) => prevPosition + 30);
+      setPosition((prevPosition) => prevPosition + 50);
     }
   };
 
@@ -20,17 +20,17 @@ const Home = () => {
       <div className="absolute top-50 left-8 text-white text-3xl w-[22rem] z-0">
         A showcase of the web's finest design + talent
       </div>
-      <div className="w-full z-10 flex items-center flex-grow relative  ">
+      <div className="w-full z-10 flex items-center flex-grow relative">
         <div
-          className={`absolute flex gap-4 w-fit `}
+          className={`absolute flex gap-4 w-fit -right-1300`}
           style={{
-            right: `-${position}rem`, // Dynamic inline style for the right position
-            transition: "right 0.5s ease-in-out", // Smooth transition for the right property
+            left: `${position}rem`,
+            transition: "left 0.5s ease-in-out",
           }}
         >
           <div className="p-4 bg-white inline-block">
             <Image
-              src={"/images/5.png"}
+              src={"/images/12.png"}
               width={160 * 4.5}
               height={90 * 4.5}
               alt="1"
@@ -39,7 +39,16 @@ const Home = () => {
 
           <div className="p-4 bg-white inline-block">
             <Image
-              src={"/images/2.png"}
+              src={"/images/14.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/6.png"}
               width={160 * 4.5}
               height={90 * 4.5}
               alt="1"
@@ -49,6 +58,51 @@ const Home = () => {
           <div className="p-4 bg-white inline-block">
             <Image
               src={"/images/3.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/7.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/8.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/11.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/13.png"}
+              width={160 * 4.5}
+              height={90 * 4.5}
+              alt="1"
+            ></Image>
+          </div>
+
+          <div className="p-4 bg-white inline-block">
+            <Image
+              src={"/images/10.png"}
               width={160 * 4.5}
               height={90 * 4.5}
               alt="1"
