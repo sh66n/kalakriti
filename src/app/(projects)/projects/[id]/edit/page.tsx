@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-const Edit = ({ params }: any) => {
+const Edit = () => {
   const { id } = useParams();
   const router = useRouter();
 
