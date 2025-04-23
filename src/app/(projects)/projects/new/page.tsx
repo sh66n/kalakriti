@@ -1,4 +1,3 @@
-import AddGithubProject from "@/components/AddGithubProject";
 import NewProjectForm from "@/components/NewProjectForm";
 import React from "react";
 
@@ -8,7 +7,6 @@ const New = () => {
       <div className="grow w-1/4 border-r border-r-[#171717]"></div>
       <div className="grow w-3/4">
         <NewProjectForm />
-        {/* <AddGithubProject /> */}
       </div>
     </div>
   );
