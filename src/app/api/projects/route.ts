@@ -5,8 +5,13 @@ import { Project } from "@/models/project.model";
 import { zProject, IProject } from "@/models/project.schema";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = auth(async (req): Promise<NextResponse> => {
+export const GET = async (req): Promise<NextResponse> => {
   try {
+    // const authSession = await auth();
+    // if (!authSession) {
+    //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    // }
+
     // if (!req.auth) {
     //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     // }
@@ -17,13 +22,18 @@ export const GET = auth(async (req): Promise<NextResponse> => {
     console.error(error);
     return NextResponse.json(error, { status: 400 });
   }
-});
+};
 
-export const POST = auth(async (req): Promise<NextResponse> => {
+export const POST = async (req): Promise<NextResponse> => {
   try {
-    if (!req.auth) {
+    const authSession = await auth();
+    if (!authSession) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
+    // if (!req.auth) {
+    //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    // }
     await connectToDb();
     const formData = await req.formData();
 
@@ -53,4 +63,4 @@ export const POST = auth(async (req): Promise<NextResponse> => {
       { status: 400 }
     );
   }
-});
+};
