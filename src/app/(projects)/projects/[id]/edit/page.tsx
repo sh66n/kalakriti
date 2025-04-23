@@ -18,7 +18,9 @@ const Edit = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (id) {
-        const data = await getProject(id);
+        // Convert id to string if it's an array
+        const projectId = Array.isArray(id) ? id[0] : id;
+        const data = await getProject(projectId);
         if (data) {
           delete data._id;
           delete data.__v;
