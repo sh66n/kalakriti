@@ -1,15 +1,18 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
-import { IUser, User } from "./models/user.model";
-import { connectToDb } from "./lib/connectToDb";
 import { authConfig } from "./auth.config";
 
+// Create a version of auth that doesn't directly use Mongoose in edge contexts
 export const { handlers, signIn, signOut, auth } = NextAuth({
   ...authConfig,
   providers: [GitHub],
   callbacks: {
     async jwt({ token, user, profile }) {
-      if (user) {
+      // JWT callback runs on server side
+      if (user && profile && process.env.NEXT_RUNTIME !== "edge") {
+        const { connectToDb } = await import("./lib/connectToDb");
+        const { User } = await import("./models/user.model");
+
         await connectToDb();
         const dbUser = await User.findOne({ username: profile.login });
         if (dbUser) {
@@ -20,15 +23,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
 
-    session({ session, token, user }) {
-      session.user._id = token.id;
-      session.user.username = token.username;
+    session({ session, token }) {
+      if (token) {
+        session.user._id = token.id;
+        session.user.username = token.username;
+      }
       return session;
     },
 
     async signIn({ user, account, profile }) {
-      if (account && account.provider === "github") {
+      if (
+        account &&
+        account.provider === "github" &&
+        process.env.NEXT_RUNTIME !== "edge"
+      ) {
         try {
+          const { connectToDb } = await import("./lib/connectToDb");
+          const { User } = await import("./models/user.model");
+
           await connectToDb();
           const dbUser = await User.findOne({ email: user.email });
           if (dbUser) user._id = dbUser._id;
@@ -59,9 +71,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const isOnNewProjectPage = request.url.endsWith("/new");
 
       //action taken depending on where we are
-      // if (isOnHomePage && !auth) {
-      //   return false;
-      // }
       if (isOnLoginPage && auth) {
         const callbackUrl = request.nextUrl.searchParams.get("callbackUrl");
         if (callbackUrl) {
@@ -69,9 +78,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         return Response.redirect(new URL("/", request.nextUrl));
       }
-      // if (isOnProjectsPage && !auth) {
-      //   return false;
-      // }
       if (isOnNewProjectPage && !auth) {
         return false;
       }
