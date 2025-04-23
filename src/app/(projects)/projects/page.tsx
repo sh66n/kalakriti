@@ -10,12 +10,15 @@ const getProjects = async (): Promise<IProject[] | null> => {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("authjs.session-token");
-    const { data } = await axios.get("http://localhost:3000/api/projects", {
-      withCredentials: true,
-      headers: {
-        Cookie: `authjs.session-token=${sessionToken?.value || ""}`,
-      },
-    });
+    const { data } = await axios.get(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects`,
+      {
+        withCredentials: true,
+        headers: {
+          Cookie: `authjs.session-token=${sessionToken?.value || ""}`,
+        },
+      }
+    );
     return data;
   } catch (error) {
     console.error(error);
