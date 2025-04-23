@@ -11,10 +11,10 @@ export const zProject = z.object({
 });
 
 export interface IProject {
-  _id: string;
+  _id?: string;
   title: string;
   description: string;
-  author: Types.ObjectId;
+  author?: Types.ObjectId;
   link: string;
   images: string[];
   collaborators?: string[];
