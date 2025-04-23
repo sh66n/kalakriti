@@ -50,7 +50,7 @@ export const POST = async (req): Promise<NextResponse> => {
       body.images.push(data.url);
     }
 
-    body.author = req.auth.user._id;
+    body.author = authSession.user._id;
 
     zProject.parse(body);
 

@@ -17,7 +17,7 @@ const DeleteButton = ({ id }: any) => {
         router.push("/projects");
         toast.success("Deleted successfully", {
           position: "top-left",
-          theme: "light",
+          theme: "dark",
         });
       }
     } catch (error) {

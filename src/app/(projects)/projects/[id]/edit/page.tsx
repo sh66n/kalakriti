@@ -57,7 +57,7 @@ const Edit = () => {
         router.push("/projects");
         toast.success("Edited successfully", {
           position: "top-left",
-          theme: "light",
+          theme: "dark",
         });
       }
     } catch (error) {
