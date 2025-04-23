@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import ProjectCard from "@/components/ProjectCard";
 
-export const getProjects = async (): Promise<IProject[] | null> => {
+const getProjects = async (): Promise<IProject[] | null> => {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("authjs.session-token");
