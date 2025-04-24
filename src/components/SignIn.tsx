@@ -11,7 +11,7 @@ export default function SignIn() {
     >
       <button
         type="submit"
-        className="bg-red-100 text-black px-3 py-2 rounded-full flex gap-2 hover:cursor-pointer"
+        className="bg-white text-black px-3 py-2 rounded-full flex gap-2 hover:cursor-pointer"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
